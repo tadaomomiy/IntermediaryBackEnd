@@ -113,7 +113,6 @@ export class UserFormComponent {
     const target = event.target as HTMLInputElement
     this.fileSelected = (target.files as FileList)[0];
     this.url = this.domSanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(this.fileSelected)) as string;
-
     // atenção no método bypassSecurityTrustHtml estamos usando URL
   }
 
