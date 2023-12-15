@@ -6,12 +6,12 @@ import sequelize from './utils/database.js';
 import association from './models/Associations.js';
 
 import cors from 'cors';
+
 const app = express();
 const { json, urlencoded } = pkg;
 
 app.use(json());
 app.use(urlencoded({ extends: true}));
-app.use("/", router);
 app.use(cors());
 
 (async () => {

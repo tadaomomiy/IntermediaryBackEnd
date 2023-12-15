@@ -5,8 +5,8 @@ const saveUser = async (UserModel) => {
     return save;
 }
 
-const getAllUser = async () => {
-    return await User.finAll({
+const getAllUsers = async () => {
+    return await User.findAll({
         order: [
             ['id', 'ASC']
         ]
@@ -36,7 +36,7 @@ const updateUserById = async(id, UserModel) => {
 
 const factory = {
     saveUser,
-    getAllUser,
+    getAllUsers,
     getUserById,
     deleteUserById,
     updateUserById

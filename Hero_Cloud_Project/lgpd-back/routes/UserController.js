@@ -18,17 +18,25 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage}).single('file');
 
 router.post("/addUser",async function(req, res) {
-    const userModel = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        gender: req.body.gender,
-        profile_picture: req.file.path
-    }
 
-    const user = await userService.saveUser(userModel);
-    return res.status(200).json(user);
-});
+    upload(req, res, async function(err) {
+        const userModel = {
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            gender: req.body.gender,
+            profile_picture: req.file.path
+        }
+
+        if (err) {
+            return res.end("Error uploading file")
+        }
+
+        const user = await userService.saveUser(userModel);
+        return res.status(200).json(user);
+    });
+})
+
 
 router.get("/getAllUsers", async function(req, res) {
     const allUsers = await userService.getAllUsers();
@@ -46,16 +54,27 @@ router.delete("/deleteUser/:id", async function(req, res){
 })
 
 router.put("/updateUser/:id",async function(req, res) {
-    const userModel = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        gender: req.body.gender,
-        profile_picture: req.file.path
-    }
+    upload(req, res, async function(err) {
+        const userModel = {
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            gender: req.body.gender,
+            profile_picture: req.file.path
+        }
 
-    const updateUser = await userService.updateUserById(req.params.id, userModel);
-    return res.status(200).json(updateUser);
+        if (err) {
+            return res.end("Error uploading file.")
+        }
+
+        const updateUser = await userService.updateUserById(req.params.id, userModel);
+        return res.status(200).json(updateUser);
+    })
+});
+
+router.get('/userImage/:id', async function (req, res) {
+    const user = await userService.getUserById(req.params.id)
+    res.sendFile(process.cwd() + '\\' + user.profile_picture);
 });
 
 export default router;
